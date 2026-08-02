@@ -1,1 +1,331 @@
+#include "BluetoothSerial.h"
 
+BluetoothSerial SerialBT;
+
+// ===================== Motor Pins =====================
+const int ENA = 2;
+const int ENB = 4;
+
+const int IN1 = 18;
+const int IN2 = 19;
+const int IN3 = 22;
+const int IN4 = 23;
+
+// ===================== Other Pins =====================
+const int buzzer = 5;
+const int led = 21;
+
+// ===================== Variables =====================
+int speedValue = 107;      // Normal speed
+bool boostMode = false;    // Boost OFF initially
+bool hornState = false;    // Horn OFF initially
+
+// ===================== Function Prototypes =====================
+void forward();
+void back();
+void left();
+void right();
+void stopCar();
+
+void setup()
+{
+  // Motor Driver Pins
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  // Buzzer & LED
+  pinMode(buzzer, OUTPUT);
+  pinMode(led, OUTPUT);
+
+  digitalWrite(buzzer, LOW);
+  digitalWrite(led, LOW);
+
+  // Initial Speed
+  analogWrite(ENA, speedValue);
+  analogWrite(ENB, speedValue);
+
+  stopCar();
+
+  Serial.begin(115200);
+
+  // Bluetooth Name
+  SerialBT.begin("ESP32_CAR");
+}
+
+void loop()
+{
+// ================= Bluetooth LED =================
+if (SerialBT.hasClient())
+{
+  digitalWrite(led, HIGH);
+}
+else
+{
+  digitalWrite(led, HIGH);
+  delay(500);
+  digitalWrite(led, LOW);
+  delay(500);
+}
+
+  // ================= Bluetooth Commands =================
+  if (SerialBT.available())
+  {
+    char c = SerialBT.read();
+
+    switch (c)
+    {
+      case 'F':
+        forward();
+        break;
+
+      case 'B':
+        back();
+        break;
+
+      case 'L':
+        left();
+        break;
+
+      case 'R':
+        right();
+        break;
+
+      case 'S':
+        stopCar();
+        break;
+
+      case 'Y':
+        hornState = !hornState;
+        digitalWrite(buzzer, hornState);
+        break;
+
+      case 'Z':
+        boostMode = !boostMode;
+
+        if (boostMode)
+          speedValue = 250;
+        else
+          speedValue = 107;
+
+        analogWrite(ENA, speedValue);
+        analogWrite(ENB, speedValue);
+        break;
+    }
+  }
+}
+
+// ===================== Motor Functions =====================
+void forward()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void back()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void left()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void right()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+void stopCar()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}#include "BluetoothSerial.h"
+
+BluetoothSerial SerialBT;
+
+// ===================== Motor Pins =====================
+const int ENA = 2;
+const int ENB = 4;
+
+const int IN1 = 18;
+const int IN2 = 19;
+const int IN3 = 22;
+const int IN4 = 23;
+
+// ===================== Other Pins =====================
+const int buzzer = 5;
+const int led = 21;
+
+// ===================== Variables =====================
+int speedValue = 107;      // Normal speed
+bool boostMode = false;    // Boost OFF initially
+bool hornState = false;    // Horn OFF initially
+
+// ===================== Function Prototypes =====================
+void forward();
+void back();
+void left();
+void right();
+void stopCar();
+
+void setup()
+{
+  // Motor Driver Pins
+  pinMode(ENA, OUTPUT);
+  pinMode(ENB, OUTPUT);
+
+  pinMode(IN1, OUTPUT);
+  pinMode(IN2, OUTPUT);
+  pinMode(IN3, OUTPUT);
+  pinMode(IN4, OUTPUT);
+
+  // Buzzer & LED
+  pinMode(buzzer, OUTPUT);
+  pinMode(led, OUTPUT);
+
+  digitalWrite(buzzer, LOW);
+  digitalWrite(led, LOW);
+
+  // Initial Speed
+  analogWrite(ENA, speedValue);
+  analogWrite(ENB, speedValue);
+
+  stopCar();
+
+  Serial.begin(115200);
+
+  // Bluetooth Name
+  SerialBT.begin("ESP32_CAR");
+}
+
+void loop()
+{
+// ================= Bluetooth LED =================
+if (SerialBT.hasClient())
+{
+  digitalWrite(led, HIGH);
+}
+else
+{
+  digitalWrite(led, HIGH);
+  delay(500);
+  digitalWrite(led, LOW);
+  delay(500);
+}
+
+  // ================= Bluetooth Commands =================
+  if (SerialBT.available())
+  {
+    char c = SerialBT.read();
+
+    switch (c)
+    {
+      case 'F':
+        forward();
+        break;
+
+      case 'B':
+        back();
+        break;
+
+      case 'L':
+        left();
+        break;
+
+      case 'R':
+        right();
+        break;
+
+      case 'S':
+        stopCar();
+        break;
+
+      case 'Y':
+        hornState = !hornState;
+        digitalWrite(buzzer, hornState);
+        break;
+
+      case 'Z':
+        boostMode = !boostMode;
+
+        if (boostMode)
+          speedValue = 250;
+        else
+          speedValue = 107;
+
+        analogWrite(ENA, speedValue);
+        analogWrite(ENB, speedValue);
+        break;
+    }
+  }
+}
+
+// ===================== Motor Functions =====================
+void forward()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void back()
+{
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, HIGH);
+}
+
+void left()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, HIGH);
+  digitalWrite(IN4, LOW);
+}
+
+void right()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, HIGH);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
+
+void stopCar()
+{
+  digitalWrite(IN1, LOW);
+  digitalWrite(IN2, LOW);
+
+  digitalWrite(IN3, LOW);
+  digitalWrite(IN4, LOW);
+}
