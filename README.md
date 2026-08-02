@@ -1,5 +1,3 @@
-# RC_CAR
-
 # ESP32 Bluetooth Controlled RC Car 🚗
 
 An ESP32-based Bluetooth-controlled RC car built using the L298N motor driver. The car can be wirelessly controlled from an Android device over Bluetooth and includes features such as adjustable speed, horn control, and connection status indication.
